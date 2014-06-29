@@ -32,14 +32,13 @@ class Astoundify_Help_Scout_RCP {
 			return rcp_errors()->add( 'no-tf-key', __( 'Please enter a ThemeForest Purchase Key' ), 'register' );
 		}
 
-		/*
 		$existing = array_search( $tf_key, $existing_keys );
 
 		if ( false === $existing ) {
 			update_option( 'tf_keys', array_merge( array( $tf_key ), $existing_keys ) );
 		} else {
 			return rcp_errors()->add( 'duplicate-tf-key', __( 'This Purchase Key is already associated with an account.' ), 'register' );
-		}*/
+		}
 
 		$url = sprintf(
 			'http://marketplace.envato.com/api/edge/%s/%s/verify-purchase:%s.json',
