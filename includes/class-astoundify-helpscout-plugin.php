@@ -103,10 +103,22 @@ class PluginHandler {
 		$email = $data[ 'customer' ][ 'email' ];
 		$user = get_user_by( 'email', $email );
 
-		$tf_key = get_user_meta( $user, 'tf_key', true );
+		$tf_key = get_user_meta( $user->ID, 'tf_key', true );
 
-		$output = sprintf( '<strong>ThemeForest Purchase Key:</strong> %s', $tf_key );
+		$output = array();
 
-		return $output;
+		$output[] = sprintf( '<strong>Key:</strong> %s', $tf_key );
+
+		if ( rcp_is_active( $user->ID ) ) {
+			$output[] = sprintf( '<strong style="color: green;">Valid Subscription</strong>' );
+		} else {
+			$output[] = sprintf( '<strong style="color: red;">Subscription Expired</strong>' );
+		}
+
+		$html .= '<ul>';
+		$html .= implode( '</li><li>', $output );
+		$html .= '</ul>';
+
+		return $html;
 	}
 }
