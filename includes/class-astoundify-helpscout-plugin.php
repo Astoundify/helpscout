@@ -111,18 +111,15 @@ class PluginHandler {
 			$rcp = sprintf( '<strong style="color: red;">Subscription Expired</strong>' );
 		}
 
-		$themeinfo = get_user_meta( $user->ID, 'tf_info' );
+		$themeinfo = get_user_meta( $user->ID, 'tf_info', true );
 
 		$html = '';
-		$html .= '<div class="toggleGroup">';
 		$html .= '<h4 class="toggleBtn"><i class="icon-gear"></i> ThemeForest Information</h4>';
-		$html .= '<div class="toggle indent"><ul class="unstyled">';
+		$html .= '<ul>';
 		$html .= implode( '</li><li>', $themeinfo );
-		$html .= '</ul></div>';
-		$html .= '</div>';
+		$html .= '</ul>';
 
-		$html .= '<h4><i class="icon-gear"></i> RCP Information</h4>';
-		$html .= $rcp;
+		$html .= '<p> ' . $rcp . '</p>';
 
 		return $html;
 	}

@@ -7,20 +7,25 @@ use HelpScout\ApiClient;
 class Astoundify_Help_Scout_RCP {
 
 	public function __construct() {
-		add_action( 'init', array( $this, 'setup_actions' ) );
-	}
-
-	public function setup_actions() {
-		if ( ! is_user_logged_in() || ! get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
-			return;
-		}
-
 		add_action( 'rcp_after_register_form_fields', array( $this, 'tf_key_field' ) );
 		add_action( 'rcp_form_errors', array( $this, 'rcp_form_errors' ), 100 );
 		add_action( 'rcp_form_processing', array( $this, 'rcp_form_processing' ), 10, 3 );
 	}
 
+	/*
+
+	public function setup_actions() {
+		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
+			return;
+		}
+
+
+	}*/
+
 	public function tf_key_field() {
+		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
+			return;
+		}
 	?>
 		<p id="rcp_tf_key_wrap">
 			<label for="tf_key">ThemeForest Purchase Key</label>
@@ -30,6 +35,10 @@ class Astoundify_Help_Scout_RCP {
 	}
 
 	public function rcp_form_errors( $postdata ) {
+		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
+			return;
+		}
+
 		$existing_keys = get_option( 'tf_keys', array() );
 
 		$tf_key = isset( $_POST[ 'rcp_tf_key' ] ) ? esc_attr( $_POST[ 'rcp_tf_key' ] ) : false;
@@ -67,6 +76,10 @@ class Astoundify_Help_Scout_RCP {
 	}
 
 	public function rcp_form_processing( $postdata, $user_id, $price ) {
+		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
+			return;
+		}
+
 		update_user_meta( $user_id, 'tf_key', $this->tf_key );
 		update_user_meta( $user_id, 'tf_info', $this->verify_purchase );
 
@@ -93,7 +106,7 @@ class Astoundify_Help_Scout_RCP {
 
 			$client->createCustomer($customer);
 		} catch( Exception $e ) {
-			wp_die( $e->getMessage() );
+
 		}
 	}
 
