@@ -105,19 +105,24 @@ class PluginHandler {
 
 		$tf_key = get_user_meta( $user->ID, 'tf_key', true );
 
-		$output = array();
-
-		$output[] = sprintf( '<strong>Key:</strong> %s', $tf_key );
-
 		if ( rcp_is_active( $user->ID ) ) {
-			$output[] = sprintf( '<strong style="color: green;">Valid Subscription</strong>' );
+			$rcp = sprintf( '<strong style="color: green;">Valid Subscription</strong>' );
 		} else {
-			$output[] = sprintf( '<strong style="color: red;">Subscription Expired</strong>' );
+			$rcp = sprintf( '<strong style="color: red;">Subscription Expired</strong>' );
 		}
 
-		$html .= '<ul>';
-		$html .= implode( '</li><li>', $output );
-		$html .= '</ul>';
+		$themeinfo = get_user_meta( $user->ID, 'tf_info' );
+
+		$html = '';
+		$html .= '<div class="toggleGroup">';
+		$html .= '<h4 class="toggleBtn"><i class="icon-gear"></i> ThemeForest Information</h4>';
+		$html .= '<div class="toggle indent"><ul class="unstyled">';
+		$html .= implode( '</li><li>', $themeinfo );
+		$html .= '</ul></div>';
+		$html .= '</div>';
+
+		$html .= '<h4><i class="icon-gear"></i> RCP Information</h4>';
+		$html .= $rcp;
 
 		return $html;
 	}

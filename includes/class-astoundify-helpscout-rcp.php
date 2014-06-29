@@ -7,11 +7,17 @@ use HelpScout\ApiClient;
 class Astoundify_Help_Scout_RCP {
 
 	public function __construct() {
+		add_action( 'init', array( $this, 'setup_actions' ) );
+	}
+
+	public function setup_actions() {
 		if ( ! is_user_logged_in() || ! get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
-			add_action( 'rcp_after_register_form_fields', array( $this, 'tf_key_field' ) );
-			add_action( 'rcp_form_errors', array( $this, 'rcp_form_errors' ), 100 );
-			add_action( 'rcp_form_processing', array( $this, 'rcp_form_processing' ), 10, 3 );
+			return;
 		}
+
+		add_action( 'rcp_after_register_form_fields', array( $this, 'tf_key_field' ) );
+		add_action( 'rcp_form_errors', array( $this, 'rcp_form_errors' ), 100 );
+		add_action( 'rcp_form_processing', array( $this, 'rcp_form_processing' ), 10, 3 );
 	}
 
 	public function tf_key_field() {

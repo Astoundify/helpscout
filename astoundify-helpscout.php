@@ -27,10 +27,6 @@ class Astoundify_Help_Scout {
 		$this->lang_dir     = trailingslashit( $this->plugin_dir . 'languages' );
 		$this->domain       = 'astoundify-helpscout';
 
-		add_action( 'init', array( $this, 'setup_includes' ) );
-	}
-
-	public function setup_includes() {
 		include( 'config.php' );
 		include( 'includes/class-astoundify-helpscout-rcp.php' );
 		include( 'includes/class-astoundify-helpscout-customer.php' );
