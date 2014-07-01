@@ -12,16 +12,6 @@ class Astoundify_Help_Scout_RCP {
 		add_action( 'rcp_form_processing', array( $this, 'rcp_form_processing' ), 10, 3 );
 	}
 
-	/*
-
-	public function setup_actions() {
-		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
-			return;
-		}
-
-
-	}*/
-
 	public function tf_key_field() {
 		if ( is_user_logged_in() && get_user_meta( get_current_user_id(), 'tf_key', true ) ) {
 			return;
@@ -49,11 +39,18 @@ class Astoundify_Help_Scout_RCP {
 			return rcp_errors()->add( 'no-tf-key', __( 'Please enter a ThemeForest Purchase Key' ), 'register' );
 		}
 
-		$existing = array_search( $tf_key, $existing_keys );
+		global $wpdb;
 
-		if ( false === $existing ) {
-			update_option( 'tf_keys', array_merge( array( $tf_key ), $existing_keys ) );
-		} else {
+		$sql = "
+			SELECT user_id
+			FROM $wpdb->usermeta
+			WHERE meta_key = 'tf_key'
+			AND meta_value = %s
+		";
+
+		$existing = $wpdb->get_var( $wpdb->prepare( $sql, $tf_key ) );
+
+		if ( $existing ) {
 			return rcp_errors()->add( 'duplicate-tf-key', __( 'This Purchase Key is already associated with an account.' ), 'register' );
 		}
 
