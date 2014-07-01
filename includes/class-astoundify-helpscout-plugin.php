@@ -105,21 +105,32 @@ class PluginHandler {
 
 		$tf_key = get_user_meta( $user->ID, 'tf_key', true );
 
-		if ( rcp_is_active( $user->ID ) ) {
-			$rcp = sprintf( '<strong style="color: green;">Valid Subscription</strong>' );
-		} else {
-			$rcp = sprintf( '<strong style="color: red;">Subscription Expired</strong>' );
-		}
-
 		$themeinfo = get_user_meta( $user->ID, 'tf_info', true );
+		$themeinfo[] = '<strong>Key:</strong> ' . $tf_key;
 
 		$html = '';
 		$html .= '<h4 class="toggleBtn"><i class="icon-gear"></i> ThemeForest Information</h4>';
-		$html .= '<ul>';
+		$html .= '<ul><li>';
 		$html .= implode( '</li><li>', $themeinfo );
-		$html .= '</ul>';
+		$html .= '</li></ul>';
 
-		$html .= '<p> ' . $rcp . '</p>';
+		$rcpinfo = array();
+
+		if ( rcp_is_active( $user->ID ) ) {
+			$rcp = sprintf( '<strong style="color: green;">Valid Subscription</strong> %s', $subscription );
+		} else {
+			$rcp = sprintf( '<strong style="color: red;">Subscription Expired</strong> %s', $subscription );
+		}
+
+		$rcpinfo[] = $rcp;
+		$rcpinfo[] = sprintf( '<strong>Status</strong>: %s', rcp_get_status( $user->ID ) );
+		$rcpinfo[] = sprintf( '<strong>Subscription Level</strong>: %s', rcp_get_subscription( $user->ID ) );
+		$rcpinfo[] = sprintf( '<strong>Expiration</strong>: %s', rcp_get_expiration_date( $user->ID ) );
+
+		$html .= '<h4 class="toggleBtn"><i class="icon-gear"></i> Subscription</h4>';
+		$html .= '<ul><li>';
+		$html .= implode( '</li><li>', $rcpinfo );
+		$html .= '</li></ul>';
 
 		return $html;
 	}
